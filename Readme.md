@@ -8,17 +8,19 @@ document.querySelector("#a-match-head-2-head").click()
 
 http://0.0.0.0:5000/page
 
-
+```
 id: str
 url: str
 param: dict
 expiration_date: int
 wait: float = 1.1
 jscript: str = ""
+```
 
+- запуск в обычном режиме
 
-запуск в обычном режиме
-python main.py
+`python main.py`
 
-запуск в безголовом режиме
-python main.py -head or python main.py --headless
+- запуск в безголовом режиме
+
+`python main.py -head or python main.py --headless`

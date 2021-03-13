@@ -19,7 +19,7 @@ def init_driver(headless=False):
     chrome_prefs["profile.default_content_settings"] = {"images": 2}
     chrome_prefs["profile.managed_default_content_settings"] = {"images": 2}
     co.add_experimental_option("prefs", chrome_prefs)
-    driver = webdriver.Chrome( os.path.join(BASE_DIR, "chromedriver"), chrome_options=co)
+    driver = webdriver.Chrome(chrome_options=co)
     return driver
 
 if __name__ == '__main__':
