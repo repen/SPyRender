@@ -26,7 +26,6 @@ def work(*args, **kwargs):
     request = args[0]
     driver.get(request.url)
     if request.jscript:
-        breakpoint()
         driver.execute_script( request.jscript )
         time.sleep(1)
     time.sleep( request.wait )

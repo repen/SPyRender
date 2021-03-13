@@ -12,9 +12,9 @@ http://0.0.0.0:5000/page?url=https://www.flashscore.ru/match/4IYBxbu7/#match-sum
 http://0.0.0.0:5000/page
 
 
-    id: str
-    url: str
-    param: dict
-    expiration_date: int
-    wait: float = 1.1
-    jscript: str = ""
+id: str
+url: str
+param: dict
+expiration_date: int
+wait: float = 1.1
+jscript: str = ""

@@ -3,6 +3,9 @@ from multiprocessing.connection import Client
 from interface import IRequest, IPageResult
 import uuid, zlib
 from datetime import datetime, timedelta
+from tool import log
+
+l = log("Api")
 
 NAME = "/tmp/work_socket"
 c = Client(NAME, authkey=b"qwerty")
@@ -37,6 +40,8 @@ def getpage():
         )
         c.send( param.__dict__ )
         data.append(param.id)
+        l.info(f"Request {param}")
+
         # data.append( c.recv() )
         
     return jsonify({"response": True, "data" : data})
@@ -49,5 +54,6 @@ def get_result(keyid):
     c.send( res.__dict__ )
     response = c.recv()
     if response:
+        l.info(f"Request {res}")
         data.append( zlib.decompress( response ).decode("utf8") )
     return jsonify({"response": True, "data" : data})
