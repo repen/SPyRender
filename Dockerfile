@@ -31,5 +31,5 @@ RUN pip install -r requirements.txt
 
 COPY script ${BASE_DIR}
 
-CMD python main.py
+CMD python main.py --headless
 #CMD tail -f /dev/null
