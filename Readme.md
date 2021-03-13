@@ -18,3 +18,10 @@ param: dict
 expiration_date: int
 wait: float = 1.1
 jscript: str = ""
+
+
+запуск в обычном режиме
+python main.py
+
+запуск в безголовом режиме
+python main.py -head or python main.py --headless
