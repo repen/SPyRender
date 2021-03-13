@@ -5,12 +5,19 @@ http://www.apache.org/licenses/LICENSE-2.0
 """
 from multiprocessing import Process, Lock
 from tool import log as _log
-import time
+import time, argparse
 
+parser = argparse.ArgumentParser(
+    formatter_class=argparse.RawTextHelpFormatter
+)
+parser.add_argument('-head', '--headless', dest='headless', 
+    default=False, action='store_true', help='режим безголового браузера')
+args = parser.parse_args()
 log = _log("MAIN")
 
 def proc1():
-    from first_process import main
+    from first_process import init
+    main = init( args.headless )
     main()
 
 def proc2():
