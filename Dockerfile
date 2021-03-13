@@ -1,7 +1,7 @@
-#docker build -t build_name:latest .
-#docker run --name container_name -d build_name:latest
-#docker run --name container_name -d -p 8120:5000 build_name:latest
-#docker run --name container_name -d -v volume:/script/data -p 8120:5000 build_name:latest
+#docker build -t pyrender:latest .
+#docker run --name app_pyrender -d pyrender:latest
+#docker run --name app_pyrender -d -p 5010:5000 pyrender:latest
+#docker run --name app_pyrender -d -v volume:/script/data -p 8120:5010 pyrender:latest
 FROM python:3.8
 
 
