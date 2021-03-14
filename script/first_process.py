@@ -25,29 +25,40 @@ def init(*args):
     driver.set_page_load_timeout(10)
 
 
-    def work(*args, **kwargs):
-        request = args[0]
+    def work( request ):
+        # request = args[0]
         driver.get(request.url)
+        time.sleep( request.wait )
+        
         if request.jscript:
             driver.execute_script( request.jscript )
             time.sleep(1)
-        time.sleep( request.wait )
+
         DATA[ request.id ] = {
             "data" : zlib.compress( driver.page_source.encode("utf8") ), 
             "expiration_date" : request.expiration_date 
         }
-        
 
-    def queue_service():
+
+    def work_service():
 
         for c in count():
             item = q_input.get()
-            req = IRequest( **item )
+            req = item
             try:
                 work( req )
                 l.info(f"item: {str(item)} req: {req}")
             except Exception as e:
                 l.error("Error", exc_info=True)
+
+    
+    def get_active_content( param: IRequest ):
+        if param.jscript:
+            driver.execute_script( param.jscript )
+            time.sleep(param.wait)
+
+        return driver.page_source
+
 
     def clear_service():
 
@@ -74,11 +85,19 @@ def init(*args):
         try:
             while True:
                 payload = conn.recv()
-                if payload.get("url"):
-                    q_input.put( payload )
-                else:
-                    page = IPageResult(id=payload['id'])
+                
+                method = payload.get("method")
+                
+                if method == "render":
+                    q_input.put( IRequest( **payload) )
+                
+                if method == "result":
+                    page = IPageResult(**payload)
                     conn.send( get_result( page ) )
+
+                if method == "active_content":
+                    data = get_active_content( IRequest(**payload) )
+                    conn.send( data )
 
                 # conn.send( payload )
         except EOFError:
@@ -102,7 +121,7 @@ def init(*args):
     def main():
         try:
             l.info(f"Start server: {NAME}")
-            Thread(target=queue_service, daemon=True).start()
+            Thread(target=work_service, daemon=True).start()
             Thread(target=clear_service, daemon=True).start()
             echo_server( NAME, authkey=b'qwerty' )
         finally:

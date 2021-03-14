@@ -22,8 +22,8 @@ def start():
     return jsonify({"error": False, "result": ["hello", "world"] })
 
 
-@Api.route("/page", methods=["GET", "POST"]) 
-def getpage():
+@Api.route("/render", methods=["GET", "POST"]) 
+def render():
     data = []
 
     if request.form:
@@ -36,7 +36,8 @@ def getpage():
             url=url, param={}, 
             wait=float(wait) if wait else 1,
             expiration_date = ctime,
-            jscript = jscript if jscript else ""
+            jscript = jscript if jscript else "",
+            method = "render"
         )
         c.send( param.__dict__ )
         data.append(param.id)
@@ -50,10 +51,36 @@ def getpage():
 @Api.route("/result/<keyid>", methods=["GET", "POST"]) 
 def get_result(keyid):
     data = []
-    res = IPageResult(id=keyid)
+    res = IPageResult(id=keyid, method="result")
     c.send( res.__dict__ )
     response = c.recv()
     if response:
         l.info(f"Request {res}")
         data.append( zlib.decompress( response ).decode("utf8") )
     return jsonify({"response": True, "data" : data})
+
+
+@Api.route("/a_content", methods=["POST"]) 
+def active_content():
+    data = []
+
+    if request.form:
+        wait    = request.form.get("wait")
+        jscript = request.form.get("jscript")
+        param = IRequest(
+            id="", 
+            url="", param={}, 
+            wait=float(wait) if wait else 1,
+            expiration_date = 0,
+            jscript = jscript if jscript else "",
+            method = "active_content"
+        )
+        c.send( param.__dict__ )
+        response = c.recv()
+        if response:
+            data.append( response )
+            l.info(f"Request {param}")
+
+
+    return jsonify({"response": True, "data" : data})
+
