@@ -8,7 +8,6 @@ from tool import log
 l = log("Api")
 
 NAME = "/tmp/work_socket"
-c = Client(NAME, authkey=b"qwerty")
 
 Api = Blueprint('Api', __name__)
 
@@ -39,6 +38,8 @@ def render():
             jscript = jscript if jscript else "",
             method = "render"
         )
+
+        c = Client(NAME, authkey=b"qwerty")
         c.send( param.__dict__ )
         data.append(param.id)
         l.info(f"Request {param}")
@@ -52,6 +53,7 @@ def render():
 def get_result(keyid):
     data = []
     res = IPageResult(id=keyid, method="result")
+    c = Client(NAME, authkey=b"qwerty")
     c.send( res.__dict__ )
     response = c.recv()
     if response:
@@ -65,6 +67,7 @@ def active_content():
     data = []
 
     if request.form:
+
         wait    = request.form.get("wait")
         jscript = request.form.get("jscript")
         param = IRequest(
@@ -75,7 +78,9 @@ def active_content():
             jscript = jscript if jscript else "",
             method = "active_content"
         )
+        c = Client(NAME, authkey=b"qwerty")
         c.send( param.__dict__ )
+        '''Здесь часто происходит ошибка'''
         response = c.recv()
         if response:
             data.append( response )
