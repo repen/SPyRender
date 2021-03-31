@@ -43,6 +43,7 @@ def render():
         c.send( param.__dict__ )
         data.append(param.id)
         l.info(f"Request {param}")
+        c.close()
 
         # data.append( c.recv() )
         
