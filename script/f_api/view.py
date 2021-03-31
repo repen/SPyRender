@@ -60,6 +60,7 @@ def get_result(keyid):
     if response:
         l.info(f"Request {res}")
         data.append( zlib.decompress( response ).decode("utf8") )
+    c.close()
     return jsonify({"response": True, "data" : data})
 
 
@@ -86,7 +87,7 @@ def active_content():
         if response:
             data.append( response )
             l.info(f"Request {param}")
-
+        c.close()
 
     return jsonify({"response": True, "data" : data})
 
