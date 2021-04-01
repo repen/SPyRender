@@ -7,6 +7,7 @@ from tool import log
 from render import init_driver
 from interface import IRequest, IPageResult
 from datetime import datetime
+from  concurrent.futures import ThreadPoolExecutor
 
 def init(*args):
     headless = args[0]
@@ -15,9 +16,9 @@ def init(*args):
 
     DATA = {}
 
-    NAME = "/tmp/work_socket"
-    if os.path.exists(NAME):
-        os.remove(NAME)
+    NAME = ("localhost", 25100)
+    # if os.path.exists(NAME):
+    #     os.remove(NAME)
 
     q_input = Queue()
     driver = init_driver( headless=headless )
@@ -105,17 +106,15 @@ def init(*args):
 
     def echo_server(address, authkey):
         serv = Listener(address, authkey=authkey)
-        while True:
-            try:
-                client = serv.accept()
-                Thread(target=echo_client, args=(client,)).start()
-                # echo_client( client )
 
-            except Exception:
-                traceback.print_exc()
-                # l.error("Error", exc_info=True)
-                # serv.close()
-                # pass
+        with ThreadPoolExecutor(max_workers=4) as executor:
+
+            for _ in count():
+                try:
+                    client = serv.accept()
+                    executor.submit(echo_client, client)
+                except Exception:
+                    traceback.print_exc()
 
 
     def main():
