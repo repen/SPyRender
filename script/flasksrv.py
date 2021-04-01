@@ -2,7 +2,6 @@ import os
 from flask import Flask
 
 from f_api.view  import Api
-from config   import BASE_DIR, PRODUCTION_WORK
 from waitress import serve
 from datetime import datetime
 
