@@ -7,7 +7,7 @@ from tool import log
 
 l = log("Api")
 
-NAME = "/tmp/work_socket"
+NAME = ("localhost", 25100)
 
 Api = Blueprint('Api', __name__)
 
