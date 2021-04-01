@@ -1,6 +1,7 @@
 #docker build -t pyrender:latest .
 #docker run --name app_pyrender --rm -d pyrender:latest
 #docker run --name app_pyrender -d -p 5010:5000 pyrender:latest
+#docker run --name app_pyrender -d --memory=1000m -p 5010:5000 pyrender:latest
 #docker run --name app_pyrender -d -v volume:/script/data -p 8120:5010 pyrender:latest
 FROM python:3.8
 
